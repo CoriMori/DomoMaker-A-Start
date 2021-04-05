@@ -3,11 +3,11 @@ const models = require('../models');
 const { Account } = models;
 
 const loginPage = (req, res) => {
-  res.render('login', {csrfToken: req.csrfToken() });
+  res.render('login', { csrfToken: req.csrfToken() });
 };
 
 const signupPage = (req, res) => {
-  res.render('signup', {csrfToken: req.csrfToken() });
+  res.render('signup', { csrfToken: req.csrfToken() });
 };
 
 const logout = (req, res) => {
@@ -63,22 +63,23 @@ const signup = (request, response) => {
 
     const newAccount = new Account.AccountModel(accountData);
 
+    
     const savePromise = newAccount.save();
 
-    savePromise.then(() => {
-      req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ redirect: '/maker' });
-    });
+    newAccount.save().then(() => {
+      // NEW FOR PART B
+     req.session.account = Account.AccountModel.toAPI(newAccount);
+     return res.json({ redirect: '/maker' });
+   }).catch((err) => {
+     console.log(err);
 
-    savePromise.catch((err) => {
-      console.log(err);
+     if (err.code === 11000) {
+       return res.status(400).json({ error: 'Username already in use.' });
+     }
 
-      if (err.code === 11000) {
-        return res.status(400).json({ error: 'Username already in user.' });
-      }
-
-      return res.status(400).json({ error: 'An error occurred' });
-    });
+     return res.status(400).json({ error: 'An error occurred' });
+   });
+   
   });
 };
 

@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 
-mongoose.Promise = global.Promise;
-
 let AccountModel = {};
 const iterations = 10000;
 const saltLength = 64;
