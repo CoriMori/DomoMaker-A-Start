@@ -30,7 +30,7 @@ const DomoSchema = new mongoose.Schema({
     ref: 'Account',
   },
 
-  createdData: {
+  createdDate: {
     type: Date,
     default: Date.now,
   },
